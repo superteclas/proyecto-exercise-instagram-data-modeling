@@ -63,5 +63,39 @@ try:
     result = render_er(Base, 'diagram.png')
     print("Perfecto, aquí tienes el diagrama, Campeón!")
 except Exception as e:
-    print("Ha habido un problema al generar el diagrama, lo siento mucho, a la otra mejor.")
+    print("Sorry! Ha habido un problema al generar el diagrama, a la otra más y mejor.")
     raise e
+
+
+r""" relaciones APUNTES:
+
+0,1: Esta notación significa "cero a uno", 
+lo que indica que un registro en una tabla 
+puede estar relacionado con cero 
+o un registro en otra tabla. 
+Esto implica que la relación es opcional, 
+pero si existe, solo puede haber una relación.
+
+0N: Esta notación también significa 
+una relación opcional "cero a muchos", 
+lo que indica que un registro en una tabla 
+puede estar relacionado con cero 
+o más registros en otra tabla.
+
+One-to-One (1:1): 
+Este tipo de relación significa 
+que un registro en una tabla 
+solo puede estar relacionado 
+con un registro en otra tabla y viceversa.
+
+One-to-Many (1:N): Este tipo de relación significa 
+que un registro en una tabla puede tener 
+múltiples relaciones con registros en otra tabla, 
+pero un registro en la segunda tabla 
+solo puede tener una relación 
+con un registro en la primera tabla.
+
+Many-to-Many (N:N): Este tipo de relación 
+se maneja mediante una tabla intermedia 
+que registra las relaciones 
+entre los registros de las dos tablas.  """
