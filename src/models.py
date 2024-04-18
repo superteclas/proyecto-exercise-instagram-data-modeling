@@ -4,10 +4,14 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
+from sqlalchemy import Enum
 
 Base = declarative_base()
 
-""" class Parent(Base):
+""" 
+
+
+class Parent(Base):
     __tablename__ = "parent_table"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -20,6 +24,11 @@ class Child(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True) """
 
+class Follower(Base):
+    __tablename__ = 'follower'
+    user_from_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_to_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user = relationship('User', back_populates='follower')
 
 class User(Base):
     __tablename__ = 'user'
@@ -28,14 +37,10 @@ class User(Base):
     first_name = Column(String(250), nullable=False)
     last_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
-    followers = relationship('follower', back_populates='user')
-    comment = relationship('comment', back_populates='user')
-    post = relationship('post', back_populates='user')
-class Followers(Base):
-    __tablename__ = 'follower'
-    user_from_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    user_to_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    user = relationship('User', back_populates='followers')
+    followers = relationship('Follower', back_populates='user')
+    comments = relationship('Comments', back_populates='author')
+    posts = relationship('Post', back_populates='user')
+
 
 class Comment(Base):
     __tablename__ = 'comment'
@@ -43,13 +48,24 @@ class Comment(Base):
     comment_text = Column(String(250))
     author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
-    author = relationship('User')
-    post = relationship('post')
+    author = relationship('User', back_populates='comment')  # Enlaza con la clase User
+    post = relationship('Post', back_populates='comment')   # Enlaza con la clase Post
 
 class Post(Base):
     __tablename__ = 'post'
-    id= Column(Integer, ForeignKey('post.id'), primary_key=True)
-    user_id = relationship('User')
+    id= Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User', back_populates='post')  # Enlaza con la clase User
+    comments = relationship('Comment', back_populates='post')  # Relación con los comentarios
+    media = relationship('Media', back_populates='post')   # Agregué la relación con Media, asumiendo que tienes una clase Media
+
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    type = Column(Enum(), nullable=False)
+    url = Column(String(250))
+    post_id= Column(Integer, ForeignKey('post.id'))
+    post = relationship('post')
     
 
 def to_dict(self):
