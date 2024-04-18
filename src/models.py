@@ -74,7 +74,7 @@ def to_dict(self):
 ## Draw from SQLAlchemy base
 try:
     result = render_er(Base, 'diagram.png')
-    print("Success! Check the diagram.png file")
+    print("Perfecto, aquí tienes el diagrama campeón!")
 except Exception as e:
-    print("There was a problem genering the diagram")
+    print("Ha habido un problema al generar el diagrama, lo siento mucho, a la otra mejor.")
     raise e
