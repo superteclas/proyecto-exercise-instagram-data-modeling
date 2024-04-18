@@ -38,7 +38,7 @@ class User(Base):
     last_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     followers = relationship('Follower', back_populates='user')
-    comments = relationship('Comment', back_populates='author')
+    comments = relationship('Comment', back_populates='user')
     posts = relationship('Post', back_populates='user')
 
 
