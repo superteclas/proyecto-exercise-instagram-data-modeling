@@ -8,27 +8,13 @@ from sqlalchemy import Enum
 
 Base = declarative_base()
 
-""" 
-
-
-class Parent(Base):
-    __tablename__ = "parent_table"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    child_id: Mapped[int] = mapped_column(ForeignKey("child_table.id"))
-    child: Mapped["Child"] = relationship()
-
-
-class Child(Base):
-    __tablename__ = "child_table"
-
-    id: Mapped[int] = mapped_column(primary_key=True) """
 
 class Follower(Base):
     __tablename__ = 'follower'
-    user_from_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    user_to_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    user = relationship('User', back_populates='follower')
+    id = Column(Integer, primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('user.id'))
+    user_to_id = Column(Integer, ForeignKey('user.id'))
+    
 
 class User(Base):
     __tablename__ = 'user'
@@ -37,9 +23,10 @@ class User(Base):
     first_name = Column(String(250), nullable=False)
     last_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
-    followers = relationship('Follower', back_populates='user')
-    comments = relationship('Comment', back_populates='user')
-    posts = relationship('Post', back_populates='user')
+    followers = relationship('Follower', back_populates='user_from', lazy=True)
+    comments = relationship('Comment', back_populates='user', lazy=True)
+    posts = relationship('Post', back_populates='user', lazy=True)
+
 
 
 class Comment(Base):
@@ -48,16 +35,16 @@ class Comment(Base):
     comment_text = Column(String(250))
     author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
-    author = relationship('User', back_populates='comment')  
-    post = relationship('Post', back_populates='comment')   
+    author = relationship('User', back_populates='comment',lazy=True)  
+    post = relationship('Post', back_populates='comment',lazy=True)   
 
 class Post(Base):
     __tablename__ = 'post'
     id= Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', back_populates='post')  
-    comments = relationship('Comment', back_populates='post')  
-    media = relationship('Media', back_populates='post')   
+    comments = relationship('Comment', back_populates='post',lazy=True)  
+    media = relationship('Media', back_populates='post',lazy=True)   
 
 class Media(Base):
     __tablename__ = 'media'
@@ -74,7 +61,7 @@ def to_dict(self):
 ## Draw from SQLAlchemy base
 try:
     result = render_er(Base, 'diagram.png')
-    print("Perfecto, aquí tienes el diagrama campeón!")
+    print("Perfecto, aquí tienes el diagrama, Campeón!")
 except Exception as e:
     print("Ha habido un problema al generar el diagrama, lo siento mucho, a la otra mejor.")
     raise e
