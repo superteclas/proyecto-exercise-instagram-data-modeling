@@ -38,7 +38,7 @@ class User(Base):
     last_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     followers = relationship('Follower', back_populates='user')
-    comments = relationship('Comments', back_populates='author')
+    comments = relationship('Comment', back_populates='author')
     posts = relationship('Post', back_populates='user')
 
 
@@ -48,16 +48,16 @@ class Comment(Base):
     comment_text = Column(String(250))
     author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
-    author = relationship('User', back_populates='comment')  # Enlaza con la clase User
-    post = relationship('Post', back_populates='comment')   # Enlaza con la clase Post
+    author = relationship('User', back_populates='comment')  
+    post = relationship('Post', back_populates='comment')   
 
 class Post(Base):
     __tablename__ = 'post'
     id= Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('User', back_populates='post')  # Enlaza con la clase User
-    comments = relationship('Comment', back_populates='post')  # Relación con los comentarios
-    media = relationship('Media', back_populates='post')   # Agregué la relación con Media, asumiendo que tienes una clase Media
+    user = relationship('User', back_populates='post')  
+    comments = relationship('Comment', back_populates='post')  
+    media = relationship('Media', back_populates='post')   
 
 class Media(Base):
     __tablename__ = 'media'
